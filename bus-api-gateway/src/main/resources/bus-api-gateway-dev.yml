@@ -1,0 +1,26 @@
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true   # auto routing using Eureka
+      routes:
+        - id: booking-service
+          uri: lb://BOOKING-SERVICE
+          predicates:
+            - Path=/booking/**
+
+        - id: bus-service
+          uri: lb://BUS-SERVICE
+          predicates:
+            - Path=/bus/**
+
+        - id: payment-service
+          uri: lb://PAYMENT-SERVICE
+          predicates:
+            - Path=/payment/**
+
+        - id: seat-service
+          uri: lb://SEAT-SERVICE
+          predicates:
+            - Path=/seat/**

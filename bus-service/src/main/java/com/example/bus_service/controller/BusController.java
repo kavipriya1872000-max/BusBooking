@@ -18,6 +18,10 @@ public class BusController {
     @Autowired
     private BusService busService;
 
+    @GetMapping("/test")
+    public String testService(){
+        return "Bus service is up and running!";
+    }
     @GetMapping("/searchBus")
     public List<Bus> searchBus(@RequestParam("source") String source,
                                @RequestParam("destination") String destination,

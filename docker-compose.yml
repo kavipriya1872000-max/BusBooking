@@ -195,6 +195,23 @@ services:
 
     networks:
       - bus-network
+  auth-service:
+    build: ./auth-service
+    container_name: auth-service
+    depends_on:
+      service-registry:
+        condition: service_started
+      config-server:
+        condition: service_started
+
+    ports:
+      - "8086:8086"
+
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+
+    networks:
+      - bus-network
 
 
 # -------------------- NETWORK --------------------

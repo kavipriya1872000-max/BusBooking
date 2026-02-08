@@ -37,6 +37,7 @@
         <module>seat-service</module>
         <module>bus-api-gateway</module>
         <module>config-server</module>
+        <module>auth-service</module>
     </modules>
 
 </project>

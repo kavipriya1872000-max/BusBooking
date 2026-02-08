@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="EntryPointsManager">
+    <writeAnnotations>
+      <writeAnnotation name="org.springframework.beans.factory.annotation.Autowired" />
+    </writeAnnotations>
+  </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="MavenProjectsManager">
     <option name="originalFiles">
@@ -13,6 +18,7 @@
         <option value="$PROJECT_DIR$/service-registry/pom.xml" />
         <option value="$PROJECT_DIR$/ConfigServerApplication/pom.xml" />
         <option value="$PROJECT_DIR$/config-server/pom.xml" />
+        <option value="$PROJECT_DIR$/auth-service/pom.xml" />
       </list>
     </option>
   </component>

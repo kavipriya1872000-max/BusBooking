@@ -4,6 +4,7 @@ import com.example.booking_service.dto.BookingRequest;
 import com.example.booking_service.dto.BookingResponse;
 import com.example.booking_service.service.BookingService;
 import com.example.booking_service.service.BookingServiceListener;
+import com.example.booking_service.service.PaymentClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,12 +21,14 @@ public class BookingController {
 
     private final BookingService bookingService;
     private final BookingServiceListener bookingServiceListener;
+    private final PaymentClientService paymentClientService;
 
 
     @Autowired
-    public BookingController(BookingService bookingService, BookingServiceListener bookingServiceListener) {
+    public BookingController(BookingService bookingService, BookingServiceListener bookingServiceListener, PaymentClientService paymentClientService) {
         this.bookingService = bookingService;
         this.bookingServiceListener = bookingServiceListener;
+        this.paymentClientService = paymentClientService;
     }
 
     @PostMapping("/bookings")
@@ -35,6 +38,12 @@ public class BookingController {
 //      BookingResponse response = bookingService.createBooking(request);
         BookingResponse response = bookingServiceListener.createBooking(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/confirm")
+    public String confirmBooking() {
+        String paymentResponse = paymentClientService.makePayment();
+        return "Booking Done. " + paymentResponse;
     }
 
 

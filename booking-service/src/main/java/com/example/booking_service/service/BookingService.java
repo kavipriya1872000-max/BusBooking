@@ -121,4 +121,8 @@ public class BookingService {
                 .substring(0, 8)
                 .toUpperCase();
     }
+
+    public String makePayment() {
+        return null;
+    }
 }

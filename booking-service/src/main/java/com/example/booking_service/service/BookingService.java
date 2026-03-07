@@ -9,13 +9,14 @@ import com.example.booking_service.repository.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Service
+@Component
 public class BookingService {
 
     private final BookingRepository bookingRepository;

@@ -8,8 +8,10 @@ import com.example.booking_service.entity.BookingStatus;
 import com.example.booking_service.repository.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.annotation.RetryableTopic;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -26,6 +28,9 @@ public class BookingServiceListener {
         this.bookingRepository = bookingRepository;
     }
 
+    @RetryableTopic(
+            attempts = "3"
+    )
     @KafkaListener(topics = "seat-locked", groupId = "booking-group")
     public void seatLocked(String bookingId) {
         System.out.println("seat locked ");
@@ -36,10 +41,23 @@ public class BookingServiceListener {
         bookingRepository.updateBookingStatus(bookingId, BookingStatus.SEAT_LOCKED);
     }
 
+    @RetryableTopic(
+            attempts = "3")
     @KafkaListener(topics = "seat-lock-failed", groupId = "booking-group")
     public void seatLockFailed(String bookingId) {
-        System.out.println("seat locked failed");
+        System.out.println("Seat lock failed for booking " + bookingId);
         bookingRepository.updateBookingStatus(bookingId, BookingStatus.CANCELLED);
+    }
+
+    @KafkaListener(topics = "seat-locked-dlt")
+    public void handleDLT(String bookingId){
+
+        System.out.println("Message moved to Dead Letter Topic: " + bookingId);
+
+        bookingRepository.updateBookingStatus(
+                bookingId,
+                BookingStatus.CANCELLED
+        );
     }
 
     public BookingResponse createBooking(BookingRequest request) {

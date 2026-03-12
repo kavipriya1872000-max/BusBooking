@@ -9,6 +9,8 @@ import com.example.booking_service.repository.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -34,6 +36,20 @@ public class BookingService {
     }
 
 
+    @Retryable(
+            value = Exception.class,
+            maxAttempts = 3,
+            backoff = @Backoff(delay = 2000)
+    )
+    public void processSeatLock(String bookingId) {
+
+        System.out.println("Processing booking " + bookingId);
+
+        bookingRepository.updateBookingStatus(
+                bookingId,
+                BookingStatus.CONFIRMED
+        );
+    }
 
     @KafkaListener(topics = "seat-locked", groupId = "booking-group")
     public void seatLocked(String bookingId){
